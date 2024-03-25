@@ -1,6 +1,10 @@
+import logging
 import typing
 
 import bs4
+
+LOG = logging.getLogger('main')
+
 
 def parse_inducements(txt: str) -> typing.List[typing.Dict[str, typing.Any]]:
     soup = bs4.BeautifulSoup(txt, features="html.parser")
@@ -22,6 +26,10 @@ def parse_inducements(txt: str) -> typing.List[typing.Dict[str, typing.Any]]:
         except ValueError:
             pass
 
+        max_count = inducement_quantity.strip().split('-')[-1]
+        if 'unlimited' in max_count.strip():
+            max_count = 0
+
         yield {'title': inducement_name,
                'type': inducement_type,
                'quantity': inducement_quantity,
@@ -29,4 +37,5 @@ def parse_inducements(txt: str) -> typing.List[typing.Dict[str, typing.Any]]:
                'team':  inducement_team,
                'cost': inducement_cost,
                'description': inducement_description,
-               'price': inducement_price }
+               'price': inducement_price,
+               'max_count': max_count}
