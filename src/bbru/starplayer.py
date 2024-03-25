@@ -15,13 +15,18 @@ def parse_player_card(soup):
     name = soup.text.strip()
     player_table = soup.findNext('table')
 
-    first_column = len(player_table.select('td')) - 5
+    #Todo: Fix issues with extra columns for Barik Farplast
+    first_column = len(player_table.select('td'))
     player_price = player_table.select('th')[0].text.replace('K', '').strip() if first_column == 1 else None
     player_mv = player_table.select('td')[first_column].text.strip()
     player_st = player_table.select('td')[first_column + 1].text.strip()
     player_ag = player_table.select('td')[first_column + 2].text.strip()
     player_pa = player_table.select('td')[first_column + 3].text.strip()
     player_av = player_table.select('td')[first_column + 4].text.strip()
+
+    if not player_av:
+        raise BBParseError(f'AV missing for player ({name},{player_mv},{player_st},{player_ag},{player_pa},{player_av})')
+
     player_skill_list = soup.findNext('ul')
     player_skills = [el.text.strip() for el in player_skill_list.select('li')]
     player_special_skill = player_skills[-1]
