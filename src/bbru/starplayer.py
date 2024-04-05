@@ -16,7 +16,7 @@ def parse_player_card(soup):
     player_table = soup.findNext('table')
 
     #Todo: Fix issues with extra columns for Barik Farplast
-    first_column = len(player_table.select('td'))
+    first_column = len(player_table.select('td')) - 6
     player_price = player_table.select('th')[0].text.replace('K', '').strip() if first_column == 1 else None
     player_mv = player_table.select('td')[first_column].text.strip()
     player_st = player_table.select('td')[first_column + 1].text.strip()
