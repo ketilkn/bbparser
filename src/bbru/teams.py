@@ -90,6 +90,8 @@ def parse_positionals(positional_table):
             'ma': columns[2].text,
             'st': columns[3].text,
             'ag': columns[4].text,
+            'pa': columns[5].text,
+            'av': columns[6].text,
             'skills': [s.strip() for s in columns[7].text.split('•') if s],
             'skill_access': {'primary': primary_skills,
                              'secondary': secondary_skills},
