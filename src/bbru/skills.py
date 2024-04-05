@@ -19,9 +19,18 @@ def parse_skills(html: str) -> typing.List[typing.Dict]:
             if element.name == 'p':
                 continue
             skill_name = element.text.strip().capitalize()
-            skill_description = str(element.findNext('p'))
+            skill_description = ''
+            for next_element in element.find_next_siblings():
+                if next_element.name not in ['p', 'ul']:
+                    break
+                skill_description = skill_description + '\n' +str(next_element)
+
             category_name = category.text.strip().title().replace('Skills', '')
-            skill = {'name': skill_name, 'description': skill_description, 'category': category_name}
+            if category_name == 'Traints':
+                category_name = 'Trait'
+            skill = {'name': skill_name,
+                     'description': skill_description.strip(),
+                     'category': category_name}
             result.append(skill)
 
     return result
